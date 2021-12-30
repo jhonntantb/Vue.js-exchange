@@ -1,7 +1,6 @@
 <template>
   <main>
     <px-header :links="links" />
-
     <router-view class="container px-5 sm:px20 py-20 flex_justify-center" />
   </main>
 </template>
@@ -41,6 +40,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
