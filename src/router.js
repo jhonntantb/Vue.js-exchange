@@ -5,7 +5,6 @@ import About from "@/views/About.vue";
 import CoinDetail from "@/views/CoinDetail.vue";
 import Error from "@/views/Error.vue";
 
-
 const routes = [
   {
     path: "/",
@@ -27,7 +26,6 @@ const routes = [
     name: "Error",
     component: Error,
   },
-  
 ];
 
 const router = createRouter({

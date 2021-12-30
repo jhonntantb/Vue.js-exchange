@@ -3,8 +3,10 @@
     <thead>
       <tr class="bg-gray-100 border-b-2 border-gray-400">
         <th></th>
-        <th :class="{up: this.sortOrder===1, down: this.sortOrder===-1}">
-          <span class="underline cursor-pointer" @click="changeSortOrder" >Ranking</span>
+        <th :class="{ up: this.sortOrder === 1, down: this.sortOrder === -1 }">
+          <span class="underline cursor-pointer" @click="changeSortOrder"
+            >Ranking</span
+          >
         </th>
         <th>Nombre</th>
         <th>Precio</th>
@@ -23,31 +25,36 @@
     </thead>
     <tbody>
       <tr
-      v-for="a in filteredAssets"
-      :key="a.id"
+        v-for="a in filteredAssets"
+        :key="a.id"
         class="border-b border-gray-200 hover:bg-gray-100 hover:bg-orange-100"
       >
         <td>
-          <img class="w-6 h-6" :src="`https://static.coincap.io/assets/icons/${a.symbol.toLowerCase()}@2x.png`" alt="a.name">
+          <img
+            class="w-6 h-6"
+            :src="`https://static.coincap.io/assets/icons/${a.symbol.toLowerCase()}@2x.png`"
+            alt="a.name"
+          />
         </td>
         <td>
           <b>#{{ a.rank }}</b>
         </td>
         <td>
-          <router-link 
-          class="hover:undrlanie text-green-600"
-          :to="{ name: 'coin-detail', params: { id: a.id }}">
-          {{ a.name }}
+          <router-link
+            class="hover:undrlanie text-green-600"
+            :to="{ name: 'coin-detail', params: { id: a.id } }"
+          >
+            {{ a.name }}
           </router-link>
-          <small class="ml-1 text-gray-500" >{{ a.symbol }}</small>
-          </td>
+          <small class="ml-1 text-gray-500">{{ a.symbol }}</small>
+        </td>
         <td>{{ dollarFilter(a.priceUsd) }}</td>
         <td>{{ dollarFilter(a.marketCapUsd) }}</td>
-        <td :class="a.changePercent24Hr<0 ? 'text-red-600':'text-blue-600' ">
+        <td :class="a.changePercent24Hr < 0 ? 'text-red-600' : 'text-blue-600'">
           {{ percentFilter(a.changePercent24Hr) }}
-          </td>
+        </td>
         <td class="hidden sm:block">
-          <px-button @click="goToCoin(a.id)" >
+          <px-button @click="goToCoin(a.id)">
             <span>Detalle</span>
           </px-button>
         </td>
@@ -57,36 +64,37 @@
 </template>
 
 <script>
-import { dollarFilter, percentFilter } from "@/filters" 
-import PxButton from "@/components/PxButton.vue"
+import { dollarFilter, percentFilter } from "@/filters";
+import PxButton from "@/components/PxButton.vue";
 
 export default {
   name: "PxAssetsTable",
   components: { PxButton },
 
-  data(){
-    return{
-      filter:"",
+  data() {
+    return {
+      filter: "",
       sortOrder: 1,
-    }
+    };
   },
 
-  computed:{
-    filteredAssets(){
+  computed: {
+    filteredAssets() {
+      const alOrder = this.sortOrder === 1 ? -1 : 1;
+      return this.assets
+        .filter(
+          (a) =>
+            a.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
+            a.name.toLowerCase().includes(this.filter.toLowerCase())
+        )
+        .sort((a, b) => {
+          if (parseInt(a.rank) > parseInt(b.rank)) {
+            return this.sortOrder;
+          }
 
-      const alOrder= this.sortOrder===1 ? -1 : 1
-      return this.assets.filter(
-        a => 
-          a.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
-          a.name.toLowerCase().includes(this.filter.toLowerCase())
-      ).sort((a,b)=>{
-        if(parseInt(a.rank)>parseInt(b.rank)){
-          return this.sortOrder
-        }
-
-        return alOrder
-      })
-    }
+          return alOrder;
+        });
+    },
   },
 
   props: {
@@ -96,22 +104,22 @@ export default {
     },
   },
 
-  methods:{
-    goToCoin(id){
-      this.$router.push({ name: "coin-detail", params:{ id } })
+  methods: {
+    goToCoin(id) {
+      this.$router.push({ name: "coin-detail", params: { id } });
     },
 
-    changeSortOrder(){
-      this.sortOrder= this.sortOrder===1? -1: 1
-    }
+    changeSortOrder() {
+      this.sortOrder = this.sortOrder === 1 ? -1 : 1;
+    },
   },
 
-  setup(){
+  setup() {
     return {
       dollarFilter,
-      percentFilter
-    }
-  }
+      percentFilter,
+    };
+  },
 };
 </script>
 
